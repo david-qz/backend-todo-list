@@ -5,6 +5,19 @@ const app = require('../lib/app');
 const { CookieAccessInfo } = require('cookiejar');
 const { UserService } = require('../lib/services/UserService');
 
+const mockUser = {
+  email: 'test@test.com',
+  password: '123456',
+};
+
+async function registerAndLogin(user) {
+  const newUser = await UserService.create(user);
+
+  const agent = request.agent(app);
+  await agent.post('/api/v1/users/sessions').send(user);
+  return [agent, newUser];
+}
+
 describe('users routes', () => {
   beforeEach(() => {
     return setup(pool);
@@ -41,5 +54,18 @@ describe('users routes', () => {
 
     const session = agent.jar.getCookie(process.env.COOKIE_NAME, CookieAccessInfo.All);
     expect(session).toBeTruthy();
+  });
+
+  it('GET /api/v1/users/me should return the currently logged in user', async () => {
+    const [agent, user] = await registerAndLogin(mockUser);
+
+    const response = await agent.get('/api/v1/users/me');
+    expect(response.status).toEqual(200);
+
+    expect(response.body).toEqual({
+      ...user,
+      exp: expect.any(Number),
+      iat: expect.any(Number),
+    });
   });
 });
