@@ -13,5 +13,6 @@ create table todos (
     id bigint generated always as identity primary key,
     user_id bigint references users (id),
     task text not null,
-    completed boolean not null default false
+    completed boolean not null default false,
+    created_at timestamptz not null default now()
 );
