@@ -23,7 +23,7 @@ describe('todos routes', () => {
     pool.end();
   });
 
-  it('GET /api/v1/todos', async () => {
+  it('GET /api/v1/todos should return all a user\'s todos', async () => {
     const agent = await login(existingUser);
 
     const response = await agent.get('/api/v1/todos');
@@ -33,5 +33,17 @@ describe('todos routes', () => {
       { task: 'do dishes', completed: true },
       { task: 'walk dog', completed: false }
     ]);
+  });
+
+  it('POST /api/v1/todos should make a new todo', async () => {
+    const agent = await login(existingUser);
+
+    const response = await agent.post('/api/v1/todos').send({ task: 'clean the bathroom', completed: false });
+    expect(response.status).toEqual(200);
+
+    expect(response.body).toEqual({
+      'task': 'clean the bathroom',
+      'completed': false
+    });
   });
 });
