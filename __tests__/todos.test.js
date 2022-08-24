@@ -62,4 +62,18 @@ describe('todos routes', () => {
       completed: false
     });
   });
+
+  it('DELETE /api/v1/todos/:id should delete a todo', async () => {
+    const agent = await login(existingUser);
+
+    const response = await agent.delete('/api/v1/todos/1');
+    expect(response.status).toEqual(200);
+
+    expect(response.body).toEqual({
+      id: '1',
+      userId: '1',
+      task: 'do dishes',
+      completed: true
+    });
+  });
 });
