@@ -30,8 +30,8 @@ describe('todos routes', () => {
     expect(response.status).toEqual(200);
 
     expect(response.body).toEqual([
-      { task: 'do dishes', completed: true },
-      { task: 'walk dog', completed: false }
+      { id: '1', userId: '1', task: 'do dishes', completed: true },
+      { id: '2', userId: '1', task: 'walk dog', completed: false }
     ]);
   });
 
@@ -42,8 +42,10 @@ describe('todos routes', () => {
     expect(response.status).toEqual(200);
 
     expect(response.body).toEqual({
-      'task': 'clean the bathroom',
-      'completed': false
+      id: '3',
+      userId: '1',
+      task: 'clean the bathroom',
+      completed: false
     });
   });
 });
