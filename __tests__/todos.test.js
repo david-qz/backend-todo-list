@@ -48,4 +48,18 @@ describe('todos routes', () => {
       completed: false
     });
   });
+
+  it('PUT /api/v1/todos/:id should update a todo', async () => {
+    const agent = await login(existingUser);
+
+    const response = await agent.put('/api/v1/todos/1').send({ completed: false });
+    expect(response.status).toEqual(200);
+
+    expect(response.body).toEqual({
+      id: '1',
+      userId: '1',
+      task: 'do dishes',
+      completed: false
+    });
+  });
 });
